@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - Delcom App</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+      <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}">
+        <div class="card mx-auto shadow-sm border-0" style="max-width: 400px">
+          <div class="card-body p-4">
+            
+            <div class="text-center mb-4">
+                <!-- Jika tidak ada logo, pakai teks saja agar tidak error gambar pecah -->
+                <!-- <img th:src="@{/assets/images/logo.png}" alt="Logo" width="64" /> -->
+                <h4 class="fw-bold text-primary">Delcom App</h4>
+                <p class="text-muted small">
+                  Masuk menggunakan kredensial akun Anda
+                </p>
+            </div>
+
+            <!-- Pesan Error Global (Misal: User tidak ditemukan) -->
+            <!-- Kita sesuaikan dengan BindingResult dari Controller -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger py-2">
+                <ul class="mb-0 ps-3">
+                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                </ul>
+            </div>
+            
+            <!-- Pesan Error dari URL parameter (?error) -->
+            <div th:if="${param.error}" class="alert alert-danger text-center">
+                Email atau kata sandi salah!
+            </div>
+            
+            <!-- Pesan Sukses (Misal: setelah register) -->
+            <div th:if="${success}" class="alert alert-success text-center" th:text="${success}"></div>
+
+            <!-- Alamat Email -->
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="inputEmail"
+                  th:field="*{email}"
+                  th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                  placeholder="nama@email.com"
+                  autocomplete="email"
+                />
+                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                  <span th:each="err : ${#fields.errors('email')}" th:text="${err}"></span>
+                </div>
+            </div>
+
+            <!-- Kata Sandi -->
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Kata Sandi</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="inputPassword"
+                  th:field="*{password}"
+                  th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                  placeholder="********"
+                  autocomplete="current-password"
+                />
+                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                  <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
+                </div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="optionRememberMe"
+                  th:field="*{rememberMe}"
+                />
+                <label class="form-check-label" for="optionRememberMe">Ingat saya</label>
+            </div>
+
+            <!-- Tombol Masuk -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Masuk</button>
+            </div>
+
+            <hr class="my-4" />
+            
+            <div class="text-center">
+                Belum memiliki akun?
+                <a th:href="@{/auth/register}" class="text-decoration-none fw-bold">Daftar</a>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+</body>
+</html>

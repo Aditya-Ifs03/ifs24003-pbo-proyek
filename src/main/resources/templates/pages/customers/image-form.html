@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubah Foto - Delcom App</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        body { background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Delcom App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/customers"><i class="bi bi-people"></i> Data Pelanggan</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-white">User</span>
+                    <a href="/auth/logout" class="btn btn-sm btn-light text-primary fw-bold">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold">Ubah Foto Profil</h5>
+                    </div>
+                    <div class="card-body text-center p-4">
+                        
+                        <!-- Preview Gambar Saat Ini -->
+                        <div class="mb-4">
+                            <img th:if="${customer.imageUrl != null}" 
+                                 th:src="@{'/uploads/' + ${customer.imageUrl}}" 
+                                 class="rounded shadow-sm" style="max-height: 200px; max-width: 100%;">
+                            <div th:unless="${customer.imageUrl != null}" class="alert alert-secondary">
+                                Belum ada foto profil
+                            </div>
+                            <p class="mt-2 text-muted fw-bold" th:text="${customer.name}"></p>
+                        </div>
+
+                        <form th:action="@{/customers/edit-image/{id}(id=${customer.id})}" method="post" enctype="multipart/form-data">
+                            <div class="mb-4 text-start">
+                                <label class="form-label">Pilih Foto Baru</label>
+                                <input type="file" name="file" class="form-control" required accept="image/*">
+                                <small class="text-muted">Format: JPG, PNG. Maks 2MB.</small>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Upload & Simpan</button>
+                                <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-light">Batal</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
