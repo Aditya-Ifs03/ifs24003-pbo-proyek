@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pelanggan - Delcom App</title>
+    <title>Data Pelanggan - Manajemen</title>
     
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
@@ -19,10 +17,9 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4" style="background-color: #3dda54;">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/">Delcom App</a>
+            <a class="navbar-brand fw-bold" href="/"> Manajemen Data </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -43,7 +40,6 @@
         </div>
     </nav>
 
-    <!-- Content -->
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="fw-bold mb-0">Manajemen Pelanggan</h3>
@@ -52,7 +48,6 @@
             </a>
         </div>
 
-        <!-- Alert Notification -->
         <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i> <span th:text="${success}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -63,26 +58,8 @@
         </div>
 
         <div class="row">
-            <!-- Bagian KIRI: Grafik Batang -->
-            <div class="col-md-5 mb-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-white fw-bold py-3 border-bottom-0">
-                        <i class="bi bi-bar-chart-fill text-primary me-2"></i> Jumlah per Tipe
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="customerChart"></canvas>
-                        </div>
-                        <!-- Pesan jika data kosong -->
-                        <div id="emptyChartMessage" class="text-muted text-center d-none mt-5">
-                            <i class="bi bi-inbox fs-1"></i><br>Belum ada data untuk ditampilkan
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bagian KANAN: Tabel Data -->
-            <div class="col-md-7 mb-4">
+            
+            <div class="col-12 mb-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-header bg-white fw-bold py-3 border-bottom-0">
                         <i class="bi bi-list-ul text-primary me-2"></i> Daftar Pelanggan
@@ -141,14 +118,29 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white fw-bold py-3 border-bottom-0">
+                        <i class="bi bi-bar-chart-fill text-primary me-2"></i> Statistik Jumlah per Tipe
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="customerChart"></canvas>
+                        </div>
+                        <div id="emptyChartMessage" class="text-muted text-center d-none mt-5">
+                            <i class="bi bi-inbox fs-1"></i><br>Belum ada data untuk ditampilkan
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Script Bootstrap & Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Script Logic Grafik Batang -->
     <script th:inline="javascript">
         /* Mengambil data dari Java Controller */
         const chartData = /*[[${chartData}]]*/ {};
@@ -162,7 +154,7 @@
             const values = Object.values(chartData);
 
             new Chart(canvas, {
-                type: 'bar', // Tipe diubah menjadi BAR (Batang)
+                type: 'bar', 
                 data: {
                     labels: labels,
                     datasets: [{
@@ -187,13 +179,13 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false } // Sembunyikan legenda karena label sumbu X sudah jelas
+                        legend: { display: false } 
                     },
                     scales: {
                         y: {
-                            beginAtZero: true, // Mulai dari 0
+                            beginAtZero: true, 
                             ticks: {
-                                stepSize: 1, // Pastikan angka bulat (orang tidak bisa desimal)
+                                stepSize: 1, 
                                 precision: 0
                             },
                             title: {
