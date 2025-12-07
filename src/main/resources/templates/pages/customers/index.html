@@ -3,134 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pelanggan - Manajemen</title>
+    <title>Manajemen Data Pelanggan</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #f8f9fa; }
-        .table-img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; }
-        /* Tinggi container chart disesuaikan */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f6f9; /* Background abu muda konsisten */
+            color: #343a40;
+        }
+
+        /* --- NAVBAR STYLE (Sama dengan Dashboard) --- */
+        .top-navbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+        }
+
+        .nav-pill-custom {
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #4b5563;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-pill-custom.active {
+            background-color: #0d6efd; 
+            color: white !important;
+        }
+        
+        .nav-pill-custom:hover:not(.active) {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        .user-pill {
+            background-color: #f3f4f6;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #fee2e2;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+        
+        .btn-logout:hover {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* --- CARD STYLE --- */
+        .card-custom {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            padding: 24px;
+            height: 100%;
+        }
+
+        /* --- TABLE STYLE --- */
+        .table-img { 
+            width: 45px; 
+            height: 45px; 
+            object-fit: cover; 
+            border-radius: 50%;
+            border: 2px solid #f3f4f6;
+        }
+        
+        .table thead th {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f3f4f6;
+            background-color: #fff;
+        }
+
+        .table td {
+            vertical-align: middle;
+            color: #374151;
+            font-size: 0.95rem;
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        /* Badges */
+        .badge-soft-warning { background-color: #fef3c7; color: #d97706; }
+        .badge-soft-info { background-color: #e0f2fe; color: #0284c7; }
+        .badge-soft-secondary { background-color: #f3f4f6; color: #4b5563; }
+
+        /* Chart */
         .chart-container { position: relative; height: 300px; width: 100%; }
+
+        /* Buttons */
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .btn-action:hover { background-color: #f3f4f6; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4" style="background-color: #3dda54;">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/"> Manajemen Data </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/customers"><i class="bi bi-people"></i> Data Pelanggan</a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center gap-3">
-                    <span class="text-white" th:text="${auth != null ? auth.name : 'User'}">User</span>
-                    <a href="/auth/logout" class="btn btn-sm btn-light text-primary fw-bold">Logout</a>
+    <nav class="top-navbar d-flex justify-content-between align-items-center mb-4 sticky-top">
+        <div class="d-flex gap-2 align-items-center">
+            <span class="fw-bold fs-5 me-3 text-primary">Manajemen</span>
+            <a href="/" class="nav-pill-custom">Dashboard</a>
+            <a href="/customers" class="nav-pill-custom active">Data Pelanggan</a> </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <div class="user-pill">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 12px;">
+                    <i class="bi bi-person-fill"></i>
                 </div>
+                <span th:text="${auth != null ? auth.name : 'User'}">User</span>
             </div>
+
+            <a href="/auth/logout" class="btn btn-logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container pb-5">
+        
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold mb-0">Manajemen Pelanggan</h3>
-            <a th:href="@{/customers/create}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Tambah Baru
+            <div>
+                <h3 class="fw-bold mb-1">Daftar Pelanggan</h3>
+                <p class="text-muted small mb-0">Kelola data pelanggan dan lihat statistik</p>
+            </div>
+            <a th:href="@{/customers/create}" class="btn btn-primary px-4 py-2" style="border-radius: 8px;">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Baru
             </a>
         </div>
 
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert" style="background-color: #dcfce7; color: #166534;">
             <i class="bi bi-check-circle-fill me-2"></i> <span th:text="${success}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="background-color: #fee2e2; color: #991b1b;">
             <i class="bi bi-exclamation-triangle-fill me-2"></i> <span th:text="${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
             
-            <div class="col-12 mb-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-white fw-bold py-3 border-bottom-0">
-                        <i class="bi bi-list-ul text-primary me-2"></i> Daftar Pelanggan
+            <div class="col-lg-8">
+                <div class="card-custom h-100 p-0"> <div class="p-4 border-bottom pb-3">
+                         <h6 class="fw-bold mb-0"><i class="bi bi-table me-2 text-primary"></i>Data Semua Pelanggan</h6>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="ps-4">Profil</th>
-                                        <th>Nama & Email</th>
-                                        <th>Tipe</th>
-                                        <th class="text-end pe-4">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="customer : ${customers}">
-                                        <td class="ps-4">
-                                            <img th:if="${customer.imageUrl != null}" 
-                                                 th:src="@{'/uploads/' + ${customer.imageUrl}}" 
-                                                 class="table-img border">
-                                            <div th:unless="${customer.imageUrl != null}" 
-                                                 class="bg-secondary text-white rounded-circle d-flex justify-content-center align-items-center table-img">
-                                                <i class="bi bi-person"></i>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="fw-bold" th:text="${customer.name}">Nama</div>
-                                            <small class="text-muted" th:text="${customer.email}">email</small>
-                                        </td>
-                                        <td>
-                                            <span class="badge rounded-pill" 
-                                                  th:classappend="${customer.type == 'VIP' ? 'bg-warning text-dark' : (customer.type == 'New' ? 'bg-info text-dark' : 'bg-secondary')}"
-                                                  th:text="${customer.type}">Regular</span>
-                                        </td>
-                                        <td class="text-end pe-4">
-                                            <div class="btn-group">
-                                                <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
-                                                <a th:href="@{/customers/edit/{id}(id=${customer.id})}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
-                                                <a th:href="@{/customers/edit-image/{id}(id=${customer.id})}" class="btn btn-sm btn-outline-info"><i class="bi bi-image"></i></a>
-                                                <form th:action="@{/customers/delete/{id}(id=${customer.id})}" method="post" class="d-inline"
-                                                      onsubmit="return confirm('Hapus data ini?');">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${customers.empty}">
-                                        <td colspan="4" class="text-center py-5 text-muted">Belum ada data pelanggan.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="ps-4">Profil</th>
+                                    <th>Identitas</th>
+                                    <th>Status</th>
+                                    <th class="text-end pe-4">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="customer : ${customers}">
+                                    <td class="ps-4">
+                                        <img th:if="${customer.imageUrl != null}" 
+                                             th:src="@{'/uploads/' + ${customer.imageUrl}}" 
+                                             class="table-img shadow-sm">
+                                        <div th:unless="${customer.imageUrl != null}" 
+                                             class="bg-light text-secondary rounded-circle d-flex justify-content-center align-items-center table-img">
+                                            <i class="bi bi-person fs-5"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-dark" th:text="${customer.name}">Nama</div>
+                                        <small class="text-muted" th:text="${customer.email}">email</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill fw-normal px-3 py-2" 
+                                              th:classappend="${customer.type == 'VIP' ? 'badge-soft-warning' : (customer.type == 'New' ? 'badge-soft-info' : 'badge-soft-secondary')}"
+                                              th:text="${customer.type}">Regular</span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-action text-secondary" title="Lihat Detail"><i class="bi bi-eye"></i></a>
+                                            <a th:href="@{/customers/edit/{id}(id=${customer.id})}" class="btn btn-action text-primary" title="Edit Data"><i class="bi bi-pencil-square"></i></a>
+                                            <a th:href="@{/customers/edit-image/{id}(id=${customer.id})}" class="btn btn-action text-info" title="Ganti Foto"><i class="bi bi-image"></i></a>
+                                            
+                                            <form th:action="@{/customers/delete/{id}(id=${customer.id})}" method="post" class="d-inline" onsubmit="return confirm('Hapus data ini?');">
+                                                <button type="submit" class="btn btn-action text-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${customers.empty}">
+                                    <td colspan="4" class="text-center py-5">
+                                        <div class="text-muted opacity-50 mb-2"><i class="bi bi-inbox fs-1"></i></div>
+                                        <span class="text-muted">Belum ada data pelanggan.</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 mb-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-white fw-bold py-3 border-bottom-0">
-                        <i class="bi bi-bar-chart-fill text-primary me-2"></i> Statistik Jumlah per Tipe
+            <div class="col-lg-4">
+                <div class="card-custom">
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-1"><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Statistik</h6>
+                        <small class="text-muted">Jumlah pelanggan per kategori</small>
                     </div>
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="customerChart"></canvas>
-                        </div>
-                        <div id="emptyChartMessage" class="text-muted text-center d-none mt-5">
-                            <i class="bi bi-inbox fs-1"></i><br>Belum ada data untuk ditampilkan
-                        </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="customerChart"></canvas>
+                    </div>
+                    <div id="emptyChartMessage" class="text-muted text-center d-none mt-5">
+                        <i class="bi bi-inbox fs-1 opacity-50"></i><br>
+                        <small>Belum ada data visual</small>
                     </div>
                 </div>
             </div>
@@ -160,19 +276,15 @@
                     datasets: [{
                         label: 'Jumlah Pelanggan',
                         data: values,
+                        // Warna disesuaikan dengan tema Dashboard (Kuning, Biru, Hijau, Abu)
                         backgroundColor: [
-                            'rgba(255, 193, 7, 0.7)',  // Kuning (VIP)
-                            'rgba(13, 202, 240, 0.7)', // Biru (New)
-                            'rgba(108, 117, 125, 0.7)',// Abu (Regular)
-                            'rgba(25, 135, 84, 0.7)'   // Hijau (Lainnya)
+                            'rgba(245, 158, 11, 0.8)',  // Kuning/Orange (VIP)
+                            'rgba(59, 130, 246, 0.8)',  // Biru (New)
+                            'rgba(107, 114, 128, 0.8)', // Abu (Regular)
+                            'rgba(16, 185, 129, 0.8)'   // Hijau
                         ],
-                        borderColor: [
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(13, 202, 240, 1)',
-                            'rgba(108, 117, 125, 1)',
-                            'rgba(25, 135, 84, 1)'
-                        ],
-                        borderWidth: 1
+                        borderRadius: 6, // Bar dengan sudut membulat
+                        borderWidth: 0
                     }]
                 },
                 options: {
@@ -184,26 +296,17 @@
                     scales: {
                         y: {
                             beginAtZero: true, 
-                            ticks: {
-                                stepSize: 1, 
-                                precision: 0
-                            },
-                            title: {
-                                display: true,
-                                text: 'Jumlah Orang'
-                            }
+                            grid: { color: '#f3f4f6' }, // Garis grid halus
+                            ticks: { stepSize: 1, precision: 0, font: { family: 'Inter' } }
                         },
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Tipe Pelanggan'
-                            }
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter' } }
                         }
                     }
                 }
             });
         } else {
-            // Sembunyikan canvas, tampilkan pesan kosong
             canvas.style.display = 'none';
             emptyMsg.classList.remove('d-none');
         }

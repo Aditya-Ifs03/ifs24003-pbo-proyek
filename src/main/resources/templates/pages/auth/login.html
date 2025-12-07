@@ -3,113 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk - aplikasi manajemen data pelanggan </title>
+    <title>Masuk - Aplikasi Manajemen Data</title>
     
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <style>
-        body {
-            background-color: #f8f9fa;
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- 1. DEFINISI ANIMASI (Sama seperti Register) --- */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95); /* Mulai dari bawah & agak kecil */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1); /* Posisi normal & ukuran normal */
+            }
+        }
+
+        /* --- BAGIAN KIRI: GAMBAR --- */
+        .left-side {
+            background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1352&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: rgba(0, 0, 0, 0.1); 
+        }
+
+        /* --- BAGIAN KANAN: AREA LOGIN --- */
+        .right-side {
+            min-height: 100vh;
+            background-color: hsl(210, 100%, 67%); /* Background Abu Muda */
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- KOTAK / CARD LOGIN --- */
+        .login-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 420px; /* Lebar login biasanya sedikit lebih kecil dari register */
+            
+            /* --- 2. TERAPKAN ANIMASI DI SINI --- */
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Styling Input Field */
+        .form-control {
+            background-color: #f0f5fa; 
+            border: 1px solid #e1e8ed;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: #1a73e8;
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1557b0;
+            transform: translateY(-1px);
+        }
+
+        .link-text {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-      <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}">
-        <div class="card mx-auto shadow-sm border-0" style="max-width: 400px">
-          <div class="card-body p-4">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
             
-            <div class="text-center mb-4">
-                <!-- Jika tidak ada logo, pakai teks saja agar tidak error gambar pecah -->
-                <!-- <img th:src="@{/assets/images/logo.png}" alt="Logo" width="64" /> -->
-                <h4 class="fw-bold text-primary"> Login </h4>
-                <p class="text-muted small">
-                  Masuk menggunakan akun yang ada 
-                </p>
+            <div class="col-lg-6 d-none d-lg-block left-side">
+                <div class="overlay"></div>
             </div>
 
-            <!-- Pesan Error Global (Misal: User tidak ditemukan) -->
-            <!-- Kita sesuaikan dengan BindingResult dari Controller -->
-            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger py-2">
-                <ul class="mb-0 ps-3">
-                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-                </ul>
-            </div>
-            
-            <!-- Pesan Error dari URL parameter (?error) -->
-            <div th:if="${param.error}" class="alert alert-danger text-center">
-                Email atau kata sandi salah!
-            </div>
-            
-            <!-- Pesan Sukses (Misal: setelah register) -->
-            <div th:if="${success}" class="alert alert-success text-center" th:text="${success}"></div>
+            <div class="col-lg-6 right-side">
+                
+                <div class="login-card">
+                    
+                    <div class="text-center mb-4">
+                        <h3 class="fw-bold text-primary" style="color: #1a73e8 !important;">Login</h3>
+                        <p class="text-muted small">
+                            Masuk menggunakan akun yang ada
+                        </p>
+                    </div>
 
-            <!-- Alamat Email -->
-            <div class="mb-3">
-                <label for="inputEmail" class="form-label">Email</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="inputEmail"
-                  th:field="*{email}"
-                  th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
-                  placeholder="nama@email.com"
-                  autocomplete="email"
-                />
-                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
-                  <span th:each="err : ${#fields.errors('email')}" th:text="${err}"></span>
+                    <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}">
+                        
+                        <div th:if="${param.error}" class="alert alert-danger text-center py-2 small mb-3">
+                            Email atau kata sandi salah!
+                        </div>
+                        <div th:if="${success}" class="alert alert-success text-center py-2 small mb-3" th:text="${success}"></div>
+
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">Email</label>
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="inputEmail"
+                                th:field="*{email}"
+                                placeholder="ediyakekot1@gmail.com" 
+                            />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Kata Sandi</label>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="inputPassword"
+                                th:field="*{password}"
+                                placeholder="........" 
+                            />
+                        </div>
+
+                        <div class="mb-4 form-check">
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                id="optionRememberMe"
+                                th:field="*{rememberMe}"
+                            />
+                            <label class="form-check-label text-muted small" for="optionRememberMe">Ingat saya</label>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-primary">Masuk</button>
+                        </div>
+
+                        <div class="text-center small text-muted">
+                            Belum memiliki akun? <a th:href="@{/auth/register}" class="link-text">Daftar</a>
+                        </div>
+                    </form>
+                </div> 
                 </div>
-            </div>
-
-            <!-- Kata Sandi -->
-            <div class="mb-3">
-                <label for="inputPassword" class="form-label">Kata Sandi</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="inputPassword"
-                  th:field="*{password}"
-                  th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
-                  placeholder="********"
-                  autocomplete="current-password"
-                />
-                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
-                  <span th:each="err : ${#fields.errors('password')}" th:text="${err}"></span>
-                </div>
-            </div>
-
-            <!-- Remember Me -->
-            <div class="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="optionRememberMe"
-                  th:field="*{rememberMe}"
-                />
-                <label class="form-check-label" for="optionRememberMe">Ingat saya</label>
-            </div>
-
-            <!-- Tombol Masuk -->
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Masuk</button>
-            </div>
-
-            <hr class="my-4" />
-            
-            <div class="text-center">
-                Belum memiliki akun?
-                <a th:href="@{/auth/register}" class="text-decoration-none fw-bold">Daftar</a>
-            </div>
-
-          </div>
         </div>
-      </form>
     </div>
 
 </body>
