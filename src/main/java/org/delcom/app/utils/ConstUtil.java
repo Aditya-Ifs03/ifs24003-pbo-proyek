@@ -13,5 +13,4 @@ public class ConstUtil {
     public static final String TEMPLATE_PAGES_CUSTOMERS_FORM = "pages/customers/form";
     public static final String TEMPLATE_PAGES_CUSTOMERS_DETAIL = "pages/customers/detail";
     public static final String TEMPLATE_PAGES_CUSTOMERS_IMAGE = "pages/customers/image-form";
-    public static String SESSION_USER_KEY;
 }
