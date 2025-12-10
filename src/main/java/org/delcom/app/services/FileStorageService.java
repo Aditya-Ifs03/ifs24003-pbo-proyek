@@ -16,6 +16,10 @@ public class FileStorageService {
     @Value("${app.upload.dir:./uploads}")
     protected String uploadDir;
 
+    public FileStorageService(String string) {
+      //TODO Auto-generated constructor stub
+    }
+
     public String storeFile(MultipartFile file, UUID todoId) throws IOException {
         // Buat directory jika belum ada
         Path uploadPath = Paths.get(uploadDir);

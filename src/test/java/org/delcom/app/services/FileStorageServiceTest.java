@@ -12,7 +12,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileStorageServiceTest {
-    FileStorageService service = new FileStorageService();
+    FileStorageService service = new FileStorageService(null);
     @TempDir Path tempDir;
 
     @BeforeEach

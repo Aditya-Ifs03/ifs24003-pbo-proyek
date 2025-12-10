@@ -4,21 +4,23 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ApiResponseTest {
+
     @Test
-    void testApiResponse_ParameterizedConstructor() {
-        String data = "data";
-        ApiResponse<String> res = new ApiResponse<>("success", "msg", data);
-        assertEquals("success", res.getStatus());
-        assertEquals("msg", res.getMessage());
-        assertEquals(data, res.getData());
-    }
-    
-    @Test
-    void testApiResponse_DefaultConstructor() {
-        // Test constructor default untuk JaCoCo
-        ApiResponse<Void> res = new ApiResponse<>();
-        assertNull(res.getStatus());
-        assertNull(res.getMessage());
-        assertNull(res.getData());
+    void testApiResponseCoverage() {
+        String testStatus = "success";
+        String testMessage = "Operasi berhasil.";
+        String testData = "Data hasil";
+
+        // 1. Test Parameterized Constructor (Covers constructor with args, getStatus, getMessage, getData)
+        ApiResponse<String> resParam = new ApiResponse<>(testStatus, testMessage, testData);
+        assertEquals(testStatus, resParam.getStatus(), "Status should match the input value.");
+        assertEquals(testMessage, resParam.getMessage(), "Message should match the input value.");
+        assertEquals(testData, resParam.getData(), "Data should match the input value.");
+
+        // 2. Test Default Constructor (Covers the no-argument constructor)
+        ApiResponse<Void> resDefault = new ApiResponse<>();
+        assertNull(resDefault.getStatus(), "Status should be null when using default constructor.");
+        assertNull(resDefault.getMessage(), "Message should be null when using default constructor.");
+        assertNull(resDefault.getData(), "Data should be null when using default constructor.");
     }
 }
