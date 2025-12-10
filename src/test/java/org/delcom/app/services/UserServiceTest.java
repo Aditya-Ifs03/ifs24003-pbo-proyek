@@ -2,95 +2,100 @@ package org.delcom.app.services;
 
 import org.delcom.app.entities.User;
 import org.delcom.app.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Optional;
 import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-    @Mock UserRepository userRepository;
-    @Mock PasswordEncoder passwordEncoder;
-    // InjectMocks mencakup coverage untuk constructor
-    @InjectMocks UserService userService;
 
-    private User testUser;
-    private final UUID ID = UUID.randomUUID();
-    private final String EMAIL = "test@example.com";
-    private final String RAW_PASS = "rawpass";
-    private final String ENCODED_PASS = "encodedpass";
+    @Mock
+    private UserRepository userRepository;
 
-    @BeforeEach
-    void setUp() {
-        testUser = new User("Test", EMAIL, ENCODED_PASS);
-        testUser.setId(ID);
+    @InjectMocks
+    private UserService userService;
+
+    @Test
+    void testCreateUser() {
+        User user = new User("Test", "test@mail.com", "pass");
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        User result = userService.createUser("Test", "test@mail.com", "pass");
+        assertNotNull(result);
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
-    void testFindById_ShouldReturnOptional() {
-        // 1. Found (Covers Optional.of path)
-        when(userRepository.findById(ID)).thenReturn(Optional.of(testUser));
-        assertTrue(userService.findById(ID).isPresent(), "User should be found by ID.");
+    void testGetUserByEmail() {
+        User user = new User();
+        when(userRepository.findFirstByEmail("test@mail.com")).thenReturn(Optional.of(user));
 
-        // 2. Not Found (Covers Optional.empty path)
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
-        assertFalse(userService.findById(UUID.randomUUID()).isPresent(), "User should not be found.");
+        User result = userService.getUserByEmail("test@mail.com");
+        assertNotNull(result);
     }
 
     @Test
-    void testFindByEmail_ShouldReturnOptional() {
-        // 1. Found (Covers Optional.of path)
-        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(testUser));
-        assertTrue(userService.findByEmail(EMAIL).isPresent(), "User should be found by email.");
+    void testGetUserById() {
+        UUID id = UUID.randomUUID();
+        when(userRepository.findById(id)).thenReturn(Optional.of(new User()));
 
-        // 2. Not Found (Covers Optional.empty path)
-        when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
-        assertFalse(userService.findByEmail("nonexistent@example.com").isPresent(), "User should not be found.");
+        User result = userService.getUserById(id);
+        assertNotNull(result);
     }
 
-    @Test
-    void testCreateUser_ShouldEncodePasswordAndSave() {
-        User newUser = new User("New", "new@test.com", RAW_PASS);
+    // --- Update User Tests ---
 
-        // Mocking: Encodes raw password
-        when(passwordEncoder.encode(RAW_PASS)).thenReturn(ENCODED_PASS);
+    @Test
+    void testUpdateUser_Success() {
+        UUID id = UUID.randomUUID();
+        User existing = new User("Old", "old@mail.com", "pass");
+        when(userRepository.findById(id)).thenReturn(Optional.of(existing));
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        User result = userService.updateUser(id, "New", "new@mail.com");
         
-        // Mocking: save returns the user (simulating repository)
-        when(userRepository.save(any(User.class))).thenAnswer(i -> {
-            User savedUser = i.getArgument(0);
-            return savedUser;
-        });
-
-        User result = userService.createUser(newUser);
-
-        // Assert: Ensure password was encoded and save was called
-        assertEquals(ENCODED_PASS, result.getPassword(), "Password should be encoded.");
-        
-        // Verify: Memastikan encode dan save dipanggil (Covers createUser method)
-        verify(passwordEncoder, times(1)).encode(RAW_PASS);
-        verify(userRepository, times(1)).save(newUser);
+        assertEquals("New", result.getName());
+        assertEquals("new@mail.com", result.getEmail());
     }
 
     @Test
-    void testVerifyPassword_Match() {
-        // Covers: return true path
-        when(passwordEncoder.matches(RAW_PASS, testUser.getPassword())).thenReturn(true);
-        assertTrue(userService.verifyPassword(testUser, RAW_PASS), "Password should match.");
-        verify(passwordEncoder, times(1)).matches(RAW_PASS, testUser.getPassword());
+    void testUpdateUser_NotFound() {
+        UUID id = UUID.randomUUID();
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        User result = userService.updateUser(id, "New", "new@mail.com");
+        assertNull(result);
+        verify(userRepository, never()).save(any());
     }
-    
+
+    // --- Update Password Tests ---
+
     @Test
-    void testVerifyPassword_NoMatch() {
-        // Covers: return false path
-        when(passwordEncoder.matches(RAW_PASS, testUser.getPassword())).thenReturn(false);
-        assertFalse(userService.verifyPassword(testUser, RAW_PASS), "Password should not match.");
-        verify(passwordEncoder, times(1)).matches(RAW_PASS, testUser.getPassword());
+    void testUpdatePassword_Success() {
+        UUID id = UUID.randomUUID();
+        User existing = new User();
+        when(userRepository.findById(id)).thenReturn(Optional.of(existing));
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        User result = userService.updatePassword(id, "newPass");
+        assertEquals("newPass", result.getPassword());
+    }
+
+    @Test
+    void testUpdatePassword_NotFound() {
+        UUID id = UUID.randomUUID();
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        User result = userService.updatePassword(id, "newPass");
+        assertNull(result);
     }
 }

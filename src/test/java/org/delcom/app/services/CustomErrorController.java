@@ -26,22 +26,18 @@ public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error")
     public ResponseEntity<Map<String, Object>> handleError(HttpServletRequest request) {
-        // Mengkonversi HttpServletRequest menjadi WebRequest agar bisa dibaca ErrorAttributes
         WebRequest webRequest = new ServletWebRequest(request);
 
-        // Mengambil detail error asli dari Spring Boot
         Map<String, Object> attributes = this.errorAttributes.getErrorAttributes(
             webRequest,
             ErrorAttributeOptions.defaults()
         );
 
-        // Mengambil status code
         Integer status = (Integer) attributes.getOrDefault("status", 500);
         String path = (String) attributes.getOrDefault("path", "unknown");
         String error = (String) attributes.getOrDefault("error", "Unknown Error");
         String message = (String) attributes.getOrDefault("message", "Terjadi kesalahan");
 
-        // Membuat Custom Body Response (Menggunakan HashMap agar mutable)
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", (status == 500) ? "error" : "fail");
