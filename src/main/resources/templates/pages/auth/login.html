@@ -12,12 +12,11 @@
             height: 100%;
             margin: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden; /* Mencegah scroll jika tidak perlu */
+            overflow: hidden;
         }
 
         /* --- BACKGROUND UTAMA --- */
         .main-container {
-            /* URL Gambar yang Anda berikan */
             background-image: url('https://images.unsplash.com/photo-1648134859177-525771773915?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjdXN0b21lciUyMGRhdGElMjBhbmFseXRpY3N8ZW58MXx8fHwxNzY1NDQxMzkwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral');
             background-size: cover;
             background-position: center;
@@ -30,12 +29,12 @@
             position: relative;
         }
 
-        /* Overlay gelap/blur agar form lebih terbaca & estetik */
+        /* Overlay gelap/blur */
         .overlay {
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: rgba(40, 40, 60, 0.3); /* Sedikit gelap */
-            backdrop-filter: blur(8px); /* Efek blur kaca seperti di referensi modern */
+            background: rgba(40, 40, 60, 0.3);
+            backdrop-filter: blur(8px);
             z-index: 1;
         }
 
@@ -45,16 +44,16 @@
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* --- KARTU LOGIN (MODAL) --- */
+        /* --- KARTU LOGIN --- */
         .login-card {
             background-color: #ffffff;
             width: 100%;
-            max-width: 400px; /* Ukuran compact seperti modal */
+            max-width: 400px;
             padding: 40px 35px;
-            border-radius: 24px; /* Sudut sangat membulat */
+            border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
             position: relative;
-            z-index: 2; /* Di atas overlay */
+            z-index: 2;
             animation: popUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             text-align: center;
         }
@@ -103,9 +102,9 @@
         }
 
         .form-control {
-            background-color: #f8f9fa; /* Background abu sangat muda */
+            background-color: #f8f9fa;
             border: 1px solid #dadce0;
-            border-radius: 12px; /* Input membulat */
+            border-radius: 12px;
             padding: 12px 15px;
             font-size: 0.95rem;
             transition: all 0.2s;
@@ -119,7 +118,7 @@
 
         /* --- BUTTON --- */
         .btn-primary {
-            background: #2962FF; /* Biru terang solid seperti referensi */
+            background: #2962FF;
             border: none;
             padding: 12px;
             font-weight: 600;
@@ -174,7 +173,7 @@
                 </p>
             </div>
 
-            <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}">
+            <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}" autocomplete="off">
                 
                 <div th:if="${param.error}" class="alert alert-danger py-2 small mb-3 text-start">
                     Email atau kata sandi salah!
@@ -188,7 +187,8 @@
                         class="form-control"
                         id="inputEmail"
                         th:field="*{email}"
-                        placeholder="nama@email.com" 
+                        placeholder="nama@email.com"
+                        autocomplete="off" 
                     />
                 </div>
 
@@ -199,7 +199,8 @@
                         class="form-control"
                         id="inputPassword"
                         th:field="*{password}"
-                        placeholder="Masukkan kata sandi" 
+                        placeholder="Masukkan kata sandi"
+                        autocomplete="off" 
                     />
                 </div>
 
