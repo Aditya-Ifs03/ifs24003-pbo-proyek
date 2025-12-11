@@ -7,178 +7,273 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { background-color: #ffffff; }
+        :root {
+            /* Palette Modern */
+            --bg-main: #F4F7FE;      
+            --primary-blue: #4318FF; 
+            --secondary-purple: #7B61FF; 
+            --text-dark: #2B3674;    
+            --text-gray: #A3AED0;
+            --input-border: #E0E5F2;
+            --input-bg: #FFFFFF;
+        }
 
-        /* Navbar Sederhana dan Rapi */
+        body {
+            font-family: 'DM Sans', 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* --- NAVBAR --- */
         .top-navbar {
             background-color: #ffffff;
-            border-bottom: 1px solid #e9ecef; /* Sedikit lebih ringan */
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding: 1rem 2rem;
         }
-        .top-navbar .nav-link {
-            color: #495057;
+
+        .nav-link-custom {
+            color: var(--text-gray);
             font-weight: 500;
             padding: 0.5rem 1rem;
-        }
-        /* Penyesuaian agar "Add Data" terlihat seperti brand */
-        .top-navbar .nav-brand-text {
-             font-weight: 700;
-             color: #495057;
-             padding: 0.5rem 1rem;
-             text-decoration: none;
-        }
-        .top-navbar .nav-link.active {
-            color: #0d6efd !important;
-            background-color: #e9f3ff; /* Background biru muda untuk item aktif */
-            border-radius: 0.25rem;
-        }
-        /* Style user-info dihapus karena elemennya akan dihapus */
-        
-        /* Form Card */
-        .form-card {
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,.1) !important;
-            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
         }
 
-        /* Header Biru */
-        .form-header-blue {
-            background-color: #0d6efd;
-            color: white;
-            padding: 1.5rem;
-            border-top-left-radius: 0.5rem; /* Sesuai border-radius card */
-            border-top-right-radius: 0.5rem;
+        .nav-link-custom:hover { color: var(--primary-blue); }
+
+        .nav-btn-active {
+            background-color: #2962FF; 
+            color: white !important;
+            border-radius: 10px;
+            padding: 8px 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(41, 98, 255, 0.2);
+            text-decoration: none;
         }
 
-        /* Drop Zone */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* --- FORM CARD (UPDATED SIZE) --- */
+        .card-modern {
+            background: #ffffff;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+            padding: 30px; /* Padding diperkecil (sebelumnya 40px) */
+        }
+
+        .form-title {
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.35rem; /* Font sedikit diperkecil */
+            margin-bottom: 0.3rem;
+        }
+
+        /* --- INPUT STYLES --- */
+        .form-label {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.85rem; /* Label sedikit lebih kecil */
+            margin-bottom: 6px;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 14px; /* Radius sedikit disesuaikan */
+            padding: 10px 14px; /* Padding input lebih compact */
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.1);
+        }
+
+        .input-group-text {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-right: none;
+            border-top-left-radius: 14px;
+            border-bottom-left-radius: 14px;
+            color: var(--text-gray);
+            padding-left: 14px;
+            font-size: 0.9rem;
+        }
+
+        .input-group:focus-within .input-group-text {
+            border-color: var(--primary-blue);
+        }
+
+        /* --- UPLOAD ZONE --- */
         .file-upload-zone {
-            border: 2px dashed #0d6efd; /* Garis putus-putus biru yang lebih menonjol */
-            border-radius: 0.5rem;
-            padding: 2rem 1rem;
+            border: 2px dashed #A3AED0; 
+            border-radius: 14px;
+            padding: 1.5rem; /* Padding upload zone diperkecil */
             text-align: center;
             cursor: pointer;
-            background-color: #f8f9fa;
+            background-color: #FAFCFE;
+            transition: all 0.2s;
         }
-        .file-upload-zone input[type="file"] {
-            display: none;
+
+        .file-upload-zone:hover {
+            border-color: var(--primary-blue);
+            background-color: #F4F7FE;
         }
-        .file-upload-zone .bi-upload {
+
+        .upload-icon {
             font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            color: #0d6efd;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-primary-custom {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px; /* Tombol sedikit lebih kecil */
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2);
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #3311db;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            color: var(--text-gray);
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
         }
         
-        /* Ikon Input Group */
-        .input-group-text {
-            background-color: #ffffff; 
-            border-right: none;
-        }
-        .input-group .form-control, .input-group .form-select, .input-group textarea {
-            border-left: none;
+        .btn-cancel:hover {
+            background-color: #F4F7FE;
+            color: var(--text-dark);
         }
     </style>
 </head>
 <body>
 
-    <nav class="top-navbar">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <a href="/" class="nav-brand-text">Add Data</a> 
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/customers"><i class="bi bi-people"></i> Data Pelanggan</a>
-                    </li>
-                </ul>
-            </div>
+    <nav class="top-navbar d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-4">
+            <a href="#" class="nav-link-custom">Pelayanan</a>
+            <a href="/" class="nav-link-custom">Dashboard</a>
+            <a href="/customers" class="nav-btn-active">Data Pelanggan</a>
+        </div>
 
-            <div class="d-flex align-items-center gap-3">
-                <a href="/auth/logout" class="nav-link text-danger p-0">Logout</a>
+        <div class="d-flex align-items-center gap-4">
+            <div class="user-profile">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 14px;">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <span th:text="${auth != null ? auth.name : 'User'}">User</span>
             </div>
+            <a href="/auth/logout" class="nav-link-custom text-danger" style="font-size: 0.9rem;">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
         </div>
     </nav>
 
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-lg-7 col-md-9">
-                <div class="card border-0 form-card">
+            <div class="col-lg-6 col-md-8">
+                
+                <div class="card-modern">
                     
-                    <div class="form-header-blue">
-                        <h4 class="mb-1 text-white" th:text="${isEdit ? 'Edit Data Pelanggan' : 'Tambah Pelanggan Baru'}">Tambah Pelanggan Baru</h4>
-                        <p class="mb-0 text-white-50">Lengkapi formulir di bawah untuk menambahkan pelanggan baru</p>
+                    <div class="mb-4 text-center">
+                        <h4 class="form-title" th:text="${isEdit ? 'Edit Data Pelanggan' : 'Tambah Pelanggan Baru'}">Tambah Pelanggan Baru</h4>
+                        <p style="color: var(--text-gray); font-size: 0.9rem;">Lengkapi formulir di bawah untuk menyimpan data</p>
                     </div>
 
-                    <div class="card-body p-5">
-                        <form th:action="${isEdit ? '/customers/edit/' + customer.id : '/customers/create'}" 
-                                th:object="${customer}" 
-                                method="post" 
-                                enctype="multipart/form-data">
+                    <form th:action="${isEdit ? '/customers/edit/' + customer.id : '/customers/create'}" 
+                          th:object="${customer}" 
+                          method="post" 
+                          enctype="multipart/form-data">
 
-                            <div class="mb-4">
-                                <label for="inputName" class="form-label">Nama Lengkap</label>
+                        <div class="mb-3">
+                            <label for="inputName" class="form-label">Nama Lengkap</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" th:field="*{name}" id="inputName" class="form-control" required placeholder="Contoh: Budi Santoso">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="inputEmail" class="form-label">Email</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" th:field="*{name}" id="inputName" class="form-control" required placeholder="Contoh: Budi Santoso">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" th:field="*{email}" id="inputEmail" class="form-control" required placeholder="nama@email.com">
                                 </div>
                             </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <label for="inputEmail" class="form-label">Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                        <input type="email" th:field="*{email}" id="inputEmail" class="form-control" required placeholder="nama@email.com">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputPhone" class="form-label">No. Telepon</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                        <input type="text" th:field="*{phone}" id="inputPhone" class="form-control" placeholder="0812...">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="inputAddress" class="form-label">Alamat</label>
+                            <div class="col-md-6">
+                                <label for="inputPhone" class="form-label">No. Telepon</label>
                                 <div class="input-group">
-                                    <span class="input-group-text align-items-start pt-2"><i class="bi bi-geo-alt"></i></span>
-                                    <textarea th:field="*{address}" id="inputAddress" class="form-control" rows="3" placeholder="Masukkan alamat lengkap..."></textarea>
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="text" th:field="*{phone}" id="inputPhone" class="form-control" placeholder="0812...">
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="mb-4">
-                                <label for="selectType" class="form-label">Tipe Pelanggan</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
-                                    <select th:field="*{type}" id="selectType" class="form-select">
-                                        <option value="Regular">Regular</option>
-                                        <option value="VIP">VIP</option>
-                                        <option value="New">New Member</option>
-                                    </select>
-                                </div>
+                        <div class="mb-3">
+                            <label for="inputAddress" class="form-label">Alamat</label>
+                            <div class="input-group">
+                                <span class="input-group-text align-items-start pt-3"><i class="bi bi-geo-alt"></i></span>
+                                <textarea th:field="*{address}" id="inputAddress" class="form-control" rows="2" placeholder="Masukkan alamat lengkap..."></textarea>
                             </div>
+                        </div>
 
-                            <div class="mb-4" th:if="${!isEdit}">
-                                <label class="form-label">Foto Profil</label>
-                                <div class="file-upload-zone" onclick="document.getElementById('fileUploadInput').click()">
-                                    <i class="bi bi-upload"></i>
-                                    <p class="fw-bold mb-1 text-primary">input file here</p>
-                                    <input type="file" name="file" id="fileUploadInput" accept="image/*">
-                                </div>
-                                <small class="text-muted">Format: JPG, PNG, Maks 2MB</small>
+                        <div class="mb-3">
+                            <label for="selectType" class="form-label">Tipe Pelanggan</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-people"></i></span>
+                                <select th:field="*{type}" id="selectType" class="form-select">
+                                    <option value="Regular">Regular</option>
+                                    <option value="VIP">VIP</option>
+                                    <option value="New">New Member</option>
+                                </select>
                             </div>
+                        </div>
 
-                            <div class="d-flex justify-content-end gap-3 pt-4">
-                                <a th:href="@{/customers}" class="btn btn-outline-secondary px-4">Cancel</a>
-                                <button type="submit" class="btn btn-primary px-5">Save Data</button>
+                        <div class="mb-4" th:if="${!isEdit}">
+                            <label class="form-label">Foto Profil</label>
+                            <div class="file-upload-zone" onclick="document.getElementById('fileUploadInput').click()">
+                                <i class="bi bi-cloud-arrow-up upload-icon"></i>
+                                <h6 class="fw-bold mb-0" style="color: var(--primary-blue); font-size: 0.9rem;">Klik untuk upload</h6>
+                                <small style="color: var(--text-gray); font-size: 0.8rem;">Format: JPG, PNG (Max 2MB)</small>
+                                <input type="file" name="file" id="fileUploadInput" accept="image/*" style="display: none;">
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-2 border-top" style="border-color: #F4F7FE !important;">
+                            <a th:href="@{/customers}" class="btn btn-cancel">Batal</a>
+                            <button type="submit" class="btn btn-primary-custom">Simpan Data</button>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -186,4 +281,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>     
+</html>

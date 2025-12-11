@@ -12,171 +12,217 @@
             height: 100%;
             margin: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden; /* Mencegah scroll jika tidak perlu */
         }
 
-        /* --- 1. DEFINISI ANIMASI (Sama seperti Register) --- */
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95); /* Mulai dari bawah & agak kecil */
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1); /* Posisi normal & ukuran normal */
-            }
-        }
-
-        /* --- BAGIAN KIRI: GAMBAR --- */
-        .left-side {
-            background-image: url('https://www.barantum.com/blog/wp-content/uploads/2022/09/Top-5-Customer-Database-Management-Software-Terbaik.png');
+        /* --- BACKGROUND UTAMA --- */
+        .main-container {
+            /* URL Gambar yang Anda berikan */
+            background-image: url('https://images.unsplash.com/photo-1648134859177-525771773915?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjdXN0b21lciUyMGRhdGElMjBhbmFseXRpY3N8ZW58MXx8fHwxNzY1NDQxMzkwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral');
             background-size: cover;
             background-position: center;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: rgba(0, 0, 0, 0.1); 
-        }
-
-        /* --- BAGIAN KANAN: AREA LOGIN --- */
-        .right-side {
-            min-height: 100vh;
-            background-color: hsl(210, 100%, 67%); /* Background Abu Muda */
+            background-repeat: no-repeat;
+            height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            position: relative;
         }
 
-        /* --- KOTAK / CARD LOGIN --- */
+        /* Overlay gelap/blur agar form lebih terbaca & estetik */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: rgba(40, 40, 60, 0.3); /* Sedikit gelap */
+            backdrop-filter: blur(8px); /* Efek blur kaca seperti di referensi modern */
+            z-index: 1;
+        }
+
+        /* --- ANIMASI --- */
+        @keyframes popUp {
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* --- KARTU LOGIN (MODAL) --- */
         .login-card {
             background-color: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 420px; /* Lebar login biasanya sedikit lebih kecil dari register */
-            
-            /* --- 2. TERAPKAN ANIMASI DI SINI --- */
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            max-width: 400px; /* Ukuran compact seperti modal */
+            padding: 40px 35px;
+            border-radius: 24px; /* Sudut sangat membulat */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2; /* Di atas overlay */
+            animation: popUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            text-align: center;
         }
 
-        /* Styling Input Field */
+        /* --- IKON PERISAI --- */
+        .shield-icon-container {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4285F4, #2962FF);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 10px 20px rgba(66, 133, 244, 0.3);
+        }
+
+        .shield-icon-svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        .login-title {
+            font-weight: 700;
+            color: #202124;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: #5f6368;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        /* --- INPUT FIELDS --- */
+        .form-label {
+            display: block;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
         .form-control {
-            background-color: #f0f5fa; 
-            border: 1px solid #e1e8ed;
+            background-color: #f8f9fa; /* Background abu sangat muda */
+            border: 1px solid #dadce0;
+            border-radius: 12px; /* Input membulat */
             padding: 12px 15px;
-            border-radius: 8px;
             font-size: 0.95rem;
+            transition: all 0.2s;
         }
 
         .form-control:focus {
             background-color: #fff;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+            border-color: #4285F4;
+            box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
         }
 
-        .form-label {
-            font-weight: 500;
-            color: #5f6368;
-            font-size: 0.9rem;
-        }
-
+        /* --- BUTTON --- */
         .btn-primary {
-            background-color: #1a73e8;
+            background: #2962FF; /* Biru terang solid seperti referensi */
             border: none;
             padding: 12px;
             font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s;
+            font-size: 1rem;
+            border-radius: 12px;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
         .btn-primary:hover {
-            background-color: #1557b0;
-            transform: translateY(-1px);
+            background-color: #1c54e2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 98, 255, 0.3);
         }
 
+        /* --- LINKS & FOOTER --- */
         .link-text {
-            color: #1a73e8;
+            color: #2962FF;
             text-decoration: none;
             font-weight: 600;
+        }
+        
+        .link-text:hover {
+            text-decoration: underline;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
         }
     </style>
 </head>
 <body>
 
-    <div class="container-fluid p-0">
-        <div class="row g-0">
+    <div class="main-container">
+        <div class="overlay"></div>
+
+        <div class="login-card">
             
-            <div class="col-lg-6 d-none d-lg-block left-side">
-                <div class="overlay"></div>
+            <div class="shield-icon-container">
+                <svg class="shield-icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                </svg>
             </div>
 
-            <div class="col-lg-6 right-side">
+            <div class="text-center">
+                <h3 class="login-title">Selamat Datang Kembali</h3>
+                <p class="login-subtitle">
+                    Masuk ke akun Anda untuk melanjutkan
+                </p>
+            </div>
+
+            <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}">
                 
-                <div class="login-card">
-                    
-                    <div class="text-center mb-4">
-                        <h3 class="fw-bold text-primary" style="color: #1a73e8 !important;">Login</h3>
-                        <p class="text-muted small">
-                            Masuk menggunakan akun yang ada
-                        </p>
-                    </div>
-
-                    <form th:action="@{/auth/login/post}" method="post" th:object="${loginForm}">
-                        
-                        <div th:if="${param.error}" class="alert alert-danger text-center py-2 small mb-3">
-                            Email atau kata sandi salah!
-                        </div>
-                        <div th:if="${success}" class="alert alert-success text-center py-2 small mb-3" th:text="${success}"></div>
-
-                        <div class="mb-3">
-                            <label for="inputEmail" class="form-label">Email</label>
-                            <input
-                                type="email"
-                                class="form-control"
-                                id="inputEmail"
-                                th:field="*{email}"
-                                placeholder="usermain@gmail.com" 
-                            />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="inputPassword" class="form-label">Kata Sandi</label>
-                            <input
-                                type="password"
-                                class="form-control"
-                                id="inputPassword"
-                                th:field="*{password}"
-                                placeholder="Your Password" 
-                            />
-                        </div>
-
-                        <div class="mb-4 form-check">
-                            <input
-                                type="checkbox"
-                                class="form-check-input"
-                                id="optionRememberMe"
-                                th:field="*{rememberMe}"
-                            />
-                            <label class="form-check-label text-muted small" for="optionRememberMe">Ingat saya</label>
-                        </div>
-
-                        <div class="d-grid gap-2 mb-4">
-                            <button type="submit" class="btn btn-primary">Masuk</button>
-                        </div>
-
-                        <div class="text-center small text-muted">
-                            Belum memiliki akun? <a th:href="@{/auth/register}" class="link-text">Daftar</a>
-                        </div>
-                    </form>
-                </div> 
+                <div th:if="${param.error}" class="alert alert-danger py-2 small mb-3 text-start">
+                    Email atau kata sandi salah!
                 </div>
-        </div>
+                <div th:if="${success}" class="alert alert-success py-2 small mb-3 text-start" th:text="${success}"></div>
+
+                <div class="mb-3 text-start">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="inputEmail"
+                        th:field="*{email}"
+                        placeholder="nama@email.com" 
+                    />
+                </div>
+
+                <div class="mb-3 text-start">
+                    <label for="inputPassword" class="form-label">Kata Sandi</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="inputPassword"
+                        th:field="*{password}"
+                        placeholder="Masukkan kata sandi" 
+                    />
+                </div>
+
+                <div class="mb-4 form-check checkbox-container">
+                    <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="optionRememberMe"
+                        th:field="*{rememberMe}"
+                        style="cursor: pointer;"
+                    />
+                    <label class="form-check-label text-muted small ms-2" for="optionRememberMe" style="cursor: pointer;">Ingat saya</label>
+                </div>
+
+                <div class="d-grid gap-2 mb-4">
+                    <button type="submit" class="btn btn-primary">Masuk</button>
+                </div>
+
+                <div class="text-center small text-muted">
+                    Belum punya akun? <a th:href="@{/auth/register}" class="link-text">Daftar sekarang</a>
+                </div>
+            </form>
+        </div> 
     </div>
 
 </body>

@@ -5,133 +5,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Pelayanan</title>
     
-    
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            /* Palette Modern (Konsisten dengan Customer Page) */
+            --bg-main: #F4F7FE;      
+            --primary-blue: #4318FF; 
+            --secondary-purple: #7B61FF; 
+            --accent-cyan: #00D9F4; 
+            --fresh-green: #05CD99;  /* Warna Baru untuk 'New' */
+            --text-dark: #2B3674;    
+            --text-gray: #A3AED0;    
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #D0D7E1;
-            color: #343a40;
+            font-family: 'DM Sans', 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            overflow-x: hidden;
         }
 
         /* --- NAVBAR --- */
         .top-navbar {
             background-color: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 0.75rem 1rem;
+            padding: 1rem 2rem;
         }
 
-        .nav-pill-custom {
-            border-radius: 8px;
-            padding: 8px 16px;
+        .nav-link-custom {
+            color: var(--text-gray);
             font-weight: 500;
-            font-size: 0.9rem;
-            color: #4b5563; 
-            transition: all 0.2s;
+            padding: 0.5rem 1rem;
             text-decoration: none;
+            transition: all 0.3s;
         }
 
-        .nav-pill-custom.active {
-            background-color: #0d6efd; 
+        .nav-link-custom:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-btn-active {
+            background-color: #2962FF;
             color: white !important;
-        }
-        
-        .nav-pill-custom:hover:not(.active) {
-            background-color: #f3f4f6;
-            color: #111827;
-        }
-
-        .btn-logout {
-            background-color: #fef2f2;
-            color: #ef4444;
-            border: 1px solid #fee2e2;
-            border-radius: 8px;
+            border-radius: 10px;
+            padding: 8px 20px;
             font-weight: 600;
-            font-size: 0.85rem;
-            padding: 8px 16px;
+            box-shadow: 0 4px 10px rgba(41, 98, 255, 0.2);
             text-decoration: none;
         }
-        
-        .btn-logout:hover {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
 
-        .user-pill {
-            background-color: #f3f4f6;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #374151;
-            font-size: 0.9rem;
+        .user-profile {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            color: var(--text-dark);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .logout-link {
+            color: var(--primary-blue);
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
         }
 
         /* --- CARDS --- */
-        .card-custom {
-            background-color: #ffffff;
+        .card-modern {
+            background: #ffffff;
+            border-radius: 20px;
             border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            padding: 24px;
+            padding: 20px 24px;
+            box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
             height: 100%;
-            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .icon-square {
-            width: 48px;
-            height: 48px;
+        .card-modern::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(244, 247, 254, 0.6));
+            z-index: 0;
+        }
+
+        /* Icon Box */
+        .icon-box {
+            width: 45px;
+            height: 45px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 16px;
+            font-size: 1.4rem;
+            color: white;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Warna Icon */
-        .bg-blue-soft { background-color: #e0f2fe; color: #0284c7; }
-        .bg-yellow-soft { background-color: #fef3c7; color: #d97706; }
-        .bg-green-soft { background-color: #dcfce7; color: #16a34a; }
+        /* Gradient Backgrounds for Icons */
+        .bg-blue-gradient { background: linear-gradient(135deg, #2962FF, #448AFF); }
+        .bg-purple-gradient { background: linear-gradient(135deg, #7B61FF, #967DFC); }
+        .bg-green-gradient { background: linear-gradient(135deg, #05CD99, #0BE8B0); } /* Updated Green */
 
-        .stat-label { font-size: 0.9rem; color: #6b7280; margin-bottom: 4px; }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: #1f2937; }
+        .stat-label {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
 
-        /* Summary Box di bawah Chart */
-        .summary-box { border-radius: 12px; padding: 16px; }
-        .summary-blue { background-color: #eff6ff; }
-        .summary-yellow { background-color: #fffbeb; }
+        .stat-value {
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- CHART SECTION --- */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Summary Boxes */
+        .summary-pill {
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: #F8F9FC; /* Abu sangat muda netral */
+        }
+
+        /* Dot Indicators */
+        .dot-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        
+        /* Warna Dot sesuai Chart */
+        .dot-cyan { background-color: var(--accent-cyan); }
+        .dot-purple { background-color: var(--secondary-purple); }
+        .dot-green { background-color: var(--fresh-green); }
 
     </style>
 </head>
 <body>
 
-    <nav class="top-navbar d-flex justify-content-between align-items-center mb-4 sticky-top">
-        <div class="d-flex gap-2">
-            <a href="#" class="nav-pill-custom active">Pelayanan</a>
-            <a href="/" class="nav-pill-custom bg-primary text-white">Dashboard</a>
-            <a href="/customers" class="nav-pill-custom">Data Pelanggan</a>
+    <nav class="top-navbar d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-4">
+            <a href="#" class="nav-link-custom">Pelayanan</a>
+            <a href="/" class="nav-btn-active">Dashboard</a>
+            <a href="/customers" class="nav-link-custom">Data Pelanggan</a>
         </div>
 
-        <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;"><i class="bi bi-bell"></i></button>
-            <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;"><i class="bi bi-gear"></i></button>
-            
-            <div class="user-pill">
-                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 12px;">
+        <div class="d-flex align-items-center gap-4">
+            <div class="user-profile">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 14px;">
                     <i class="bi bi-person-fill"></i>
                 </div>
-                <span th:text="${auth != null ? auth.name : 'Aditya'}">Aditya</span>
+                <span th:text="${auth != null ? auth.name : 'User'}">User</span>
             </div>
-
-            <a href="/auth/logout" class="btn btn-logout">
+            <a href="/auth/logout" class="logout-link">
                 <i class="bi bi-box-arrow-right"></i> Logout
             </a>
         </div>
@@ -139,101 +194,105 @@
 
     <div class="container pb-5">
 
-        <div class="card-custom mb-4 py-4">
-            <h4 class="fw-bold mb-1">Dashboard Overview</h4>
-            <p class="text-muted mb-0 small">
-                Selamat datang kembali, <span th:text="${auth != null ? auth.name : 'Aditya'}">User</span>! Berikut adalah ringkasan data pelanggan Anda hari ini.
-            </p>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card-modern">
+                    <div class="icon-box bg-blue-gradient">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="stat-label">Total Pelanggan</div>
+                    <div class="stat-value" th:text="${totalCustomers}">0</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-modern">
+                    <div class="icon-box bg-purple-gradient">
+                        <i class="bi bi-star"></i>
+                    </div>
+                    <div class="stat-label">Pelanggan VIP</div>
+                    <div class="stat-value" th:text="${vipCount}">0</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-modern">
+                    <div class="icon-box bg-green-gradient">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <div class="stat-label">Pelanggan Baru / Regular</div>
+                    <div class="stat-value" th:text="${newMemberCount}">0</div>
+                </div>
+            </div>
         </div>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="card-custom p-3">
-                    <div class="mb-3">
-                        <div class="icon-square bg-blue-soft"><i class="bi bi-people-fill"></i></div>
-                        </div>
-                    <div class="stat-label">Total Pelanggan</div>
-                    <div class="stat-value" th:text="${totalCustomers}">3</div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card-custom p-3">
-                    <div class="mb-3">
-                        <div class="icon-square bg-yellow-soft"><i class="bi bi-star-fill"></i></div>
-                        </div>
-                    <div class="stat-label">Pelanggan VIP</div>
-                    <div class="stat-value" th:text="${vipCount}">1</div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card-custom p-3">
-                    <div class="mb-3">
-                        <div class="icon-square bg-green-soft"><i class="bi bi-person-badge"></i></div>
-                        </div>
-                    <div class="stat-label">Pelanggan Regular</div>
-                    <div class="stat-value" th:text="${newMemberCount}">2</div>
-                </div>
-            </div>
-            
-            </div>
-
-        <div class="row g-4">
+        <div class="row">
             <div class="col-12">
-                <div class="card-custom h-100 position-relative">
-                    <div class="d-flex align-items-center mb-4">
-                        <div class="bg-primary-subtle p-2 rounded-circle me-3 text-primary">
-                            <i class="bi bi-pie-chart-fill fs-5"></i>
-                        </div>
+                <div class="card-modern p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
-                            <h6 class="fw-bold mb-0">Distribusi Tipe Pelanggan</h6>
-                            <small class="text-muted">Berdasarkan kategori pelanggan</small>
+                            <h5 class="fw-bold mb-1" style="color: var(--text-dark);">Distribusi Tipe Pelanggan</h5>
+                            <small style="color: var(--text-gray);">Persentase berdasarkan kategori</small>
                         </div>
+                        <i class="bi bi-pie-chart text-muted" style="cursor: pointer;"></i>
                     </div>
 
-                    <div class="d-flex justify-content-center mb-4" style="height: 300px;">
+                    <div class="chart-container mb-4">
                         <canvas id="customerChart"></canvas>
                     </div>
 
-                    <div class="row g-3 mt-auto">
+                    <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="summary-box summary-blue d-flex justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-primary fw-bold d-block mb-1">Regular</small>
-                                    <span class="fw-bold text-dark" th:text="${newMemberCount + ' Pelanggan'}">2 Pelanggan</span>
-                                </div>
-                                <i class="bi bi-person-badge fs-2 text-primary opacity-25"></i>
+                            <div class="summary-pill">
+                                <small class="text-muted mb-1"><span class="dot-indicator dot-green"></span>New / Regular</small>
+                                <h5 class="fw-bold mb-0" style="color: var(--text-dark);" th:text="${newMemberCount + ' Pelanggan'}">0 Pelanggan</h5>
+                                <small class="text-muted" style="font-size: 0.75rem;">Status Aktif</small>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="summary-box summary-yellow d-flex justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-warning fw-bold d-block mb-1" style="color: #d97706 !important;">VIP</small>
-                                    <span class="fw-bold text-dark" th:text="${vipCount + ' Pelanggan'}">1 Pelanggan</span>
-                                </div>
-                                <i class="bi bi-star-fill fs-2 text-warning opacity-25"></i>
+                            <div class="summary-pill">
+                                <small class="text-muted mb-1"><span class="dot-indicator dot-purple"></span>VIP</small>
+                                <h5 class="fw-bold mb-0" style="color: var(--text-dark);" th:text="${vipCount + ' Pelanggan'}">0 Pelanggan</h5>
+                                <small class="text-muted" style="font-size: 0.75rem;">Status Prioritas</small>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-        </div> </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script th:inline="javascript">
-        /* Mengambil data dari Java Controller dengan aman */
-        const chartData = /*[[${chartData}]]*/ {};
+        /* --- 1. DATA DRIVEN COLOR LOGIC --- */
+        // Mengambil data dari backend
+        const chartData = /*[[${chartData}]]*/ {}; 
         
+        // Default data jika kosong
         const defaultData = {
-            labels: ['Regular', 'VIP'],
-            data: [2, 1] 
+            labels: ['New', 'VIP', 'Regular'],
+            data: [2, 3, 1] 
         };
 
         const finalLabels = (chartData && Object.keys(chartData).length > 0) ? Object.keys(chartData) : defaultData.labels;
         const finalValues = (chartData && Object.keys(chartData).length > 0) ? Object.values(chartData) : defaultData.data;
+
+        // --- 2. PALET WARNA (KONSISTEN DENGAN CUSTOMER PAGE) ---
+        const colorPalette = {
+            'VIP': '#7B61FF',       // Ungu
+            'Regular': '#00D9F4',   // Cyan (Agar pop di dashboard)
+            'New': '#05CD99',       // Hijau Emerald (WARNA BARU)
+            'default': '#A3AED0'    // Fallback Abu
+        };
+
+        // Mapping warna background berdasarkan label yang muncul
+        const backgroundColors = finalLabels.map(label => {
+            const key = Object.keys(colorPalette).find(k => k.toLowerCase() === label.toLowerCase());
+            return key ? colorPalette[key] : colorPalette['default'];
+        });
 
         const ctx = document.getElementById('customerChart').getContext('2d');
         new Chart(ctx, {
@@ -242,23 +301,52 @@
                 labels: finalLabels,
                 datasets: [{
                     data: finalValues,
-                    backgroundColor: ['#3b82f6', '#f59e0b'], 
+                    backgroundColor: backgroundColors, 
+                    hoverBackgroundColor: backgroundColors,
                     borderWidth: 0,
-                    hoverOffset: 4
+                    hoverOffset: 10
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '70%', 
+                cutout: '75%', // Lubang tengah lebih besar (Modern Look)
                 plugins: {
-                    legend: { 
+                    legend: {
                         position: 'bottom',
                         labels: {
                             usePointStyle: true,
                             padding: 20,
-                            font: { family: 'Inter', size: 12 }
+                            font: { family: 'DM Sans', size: 12 },
+                            color: '#A3AED0',
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map((label, i) => {
+                                        const value = data.datasets[0].data[i];
+                                        const fill = data.datasets[0].backgroundColor[i];
+                                        return {
+                                            text: `${label} (${value})`, // Menampilkan angka di legenda
+                                            fillStyle: fill,
+                                            strokeStyle: fill,
+                                            hidden: false,
+                                            index: i
+                                        };
+                                    });
+                                }
+                                return [];
+                            }
                         }
+                    },
+                    tooltip: {
+                        backgroundColor: '#fff',
+                        titleColor: '#2B3674',
+                        bodyColor: '#2B3674',
+                        borderColor: '#EFEFEF',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true,
+                        boxPadding: 4
                     }
                 }
             }
