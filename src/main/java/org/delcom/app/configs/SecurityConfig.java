@@ -16,13 +16,14 @@ public class SecurityConfig {
         http
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((req, res, e) -> {
-                    // Log error ke console agar kita tahu kenapa redirect terjadi
-                    System.out.println("Unauthorized request to: " + req.getRequestURI());
+                    // System.out.println dihapus (OK, jadi lebih bersih)
                     res.sendRedirect("/auth/login");
                 }))
             .authorizeHttpRequests(auth -> auth
-                // WAJIB: Tambahkan "/error" di sini agar tidak looping saat ada error sistem
-                .requestMatchers("/auth/**", "/assets/**", "/api/**", "/css/**", "/js/**", "/error", "/uploads/**")
+                // WAJIB: Tambahkan "/error" lagi. 
+                // "/uploads/**" boleh tidak ada jika ingin gambar diprivate.
+                .requestMatchers("/auth/**", "/assets/**", "/api/**", 
+                                 "/css/**", "/js/**", "/error") 
                 .permitAll()
                 .anyRequest().authenticated())
 
@@ -38,10 +39,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
-
-        
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class HomeView {
@@ -27,62 +27,51 @@ public class HomeView {
 
     @GetMapping("/")
     public String home(Model model) {
-        // 1. Cek User Login
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = null;
-
-        if (auth != null && auth.getPrincipal() instanceof User) {
-            user = (User) auth.getPrincipal();
-            model.addAttribute("auth", user);
-        } else {
-            return "redirect:/auth/logout";
+        // 1. Ambil User dari Security Context
+        User user = getAuthUser();
+        if (user == null) {
+            return "redirect:/auth/login";
         }
+        
+        model.addAttribute("auth", user);
 
-        // ================= SAFE MODE START =================
-        // Kita bungkus logic database dalam try-catch agar halaman tidak error 500
-        try {
-            List<Customer> allCustomers = customerService.getAllByUserId(user.getId());
-            if (allCustomers == null) allCustomers = new ArrayList<>();
+        // 2. Ambil Data Pelanggan
+        List<Customer> allCustomers = Optional.ofNullable(customerService.getAllByUserId(user.getId()))
+                .orElse(Collections.emptyList());
 
-            // Statistik
-            model.addAttribute("totalCustomers", allCustomers.size());
-            
-            long vipCount = allCustomers.stream()
-                    .filter(c -> c.getType() != null && "VIP".equalsIgnoreCase(c.getType()))
-                    .count();
-            model.addAttribute("vipCount", vipCount);
-            model.addAttribute("newMemberCount", allCustomers.size() - vipCount);
+        // 3. Hitung Statistik (Total, VIP, Regular)
+        long totalCustomers = allCustomers.size();
+        long vipCount = allCustomers.stream()
+                .filter(c -> "VIP".equalsIgnoreCase(c.getType()))
+                .count();
+        long regularCount = totalCustomers - vipCount;
 
-            // Chart Data
-            Map<String, Long> chartData = customerService.getChartData(user.getId());
-            if (chartData == null) chartData = new HashMap<>();
-            model.addAttribute("chartData", chartData);
-            
-            // Recent Data
-            List<Customer> recentCustomers = allCustomers.stream()
-                    .filter(c -> c.getCreatedAt() != null)
-                    .sorted(Comparator.comparing(Customer::getCreatedAt).reversed())
-                    .limit(5)
-                    .toList();
-            model.addAttribute("recentCustomers", recentCustomers);
+        // 4. Ambil 5 Data Terbaru
+        List<Customer> recentCustomers = allCustomers.stream()
+                .filter(c -> c.getCreatedAt() != null)
+                .sorted(Comparator.comparing(Customer::getCreatedAt).reversed())
+                .limit(5)
+                .toList();
 
-        } catch (Exception e) {
-            // JIKA ERROR: Tampilkan pesan di Console, tapi jangan bikin halaman crash
-            System.err.println("==================================================");
-            System.err.println("ERROR DI DASHBOARD: " + e.getMessage());
-            e.printStackTrace();
-            System.err.println("==================================================");
+        // 5. Ambil Data Chart
+        Map<String, Long> chartData = customerService.getChartData(user.getId());
 
-            // Kirim data kosong agar HTML tidak error
-            model.addAttribute("totalCustomers", 0);
-            model.addAttribute("vipCount", 0);
-            model.addAttribute("newMemberCount", 0);
-            model.addAttribute("chartData", new HashMap<>());
-            model.addAttribute("recentCustomers", new ArrayList<>());
-            model.addAttribute("errorMsg", "Gagal memuat data: " + e.getMessage());
-        }
-        // ================= SAFE MODE END =================
+        // 6. Masukkan ke Model
+        model.addAttribute("totalCustomers", totalCustomers);
+        model.addAttribute("vipCount", vipCount);
+        model.addAttribute("newMemberCount", regularCount); // Menggunakan regular sebagai 'New/Other'
+        model.addAttribute("recentCustomers", recentCustomers);
+        model.addAttribute("chartData", chartData);
 
         return ConstUtil.TEMPLATE_PAGES_HOME;
+    }
+
+    // Helper method agar pengecekan user lebih rapi
+    private User getAuthUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof User) {
+            return (User) auth.getPrincipal();
+        }
+        return null;
     }
 }
